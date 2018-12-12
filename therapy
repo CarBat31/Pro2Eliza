@@ -1,0 +1,314 @@
+package Project2;
+
+import java.awt.FlowLayout;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Random;
+import javax.swing.JOptionPane;
+import java.util.Scanner;
+import java.awt.GridLayout;
+import javax.swing.JLabel;
+
+
+public class ProEliza extends javax.swing.JFrame {
+
+	private javax.swing.JButton jButton1;
+	private javax.swing.JButton jButton2;
+	private javax.swing.JButton jButton3;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JTextField jTextField1;
+  private int countQuest = 1;
+  private int countSession = 1;
+  private JLabel label;
+  private JLabel label_1;
+  private JLabel label_2;
+  private JLabel label_3;
+  private static final String filename = "target.txt";
+  public int i=0;
+  String[] answers = new String[10];
+  String greatest = "", smallest = "";
+    
+public ProEliza() {
+	
+	JOptionPane.showMessageDialog(null, "Welcome to the ProEliza therapy Session. Start Session to begin");
+	initComponents();
+	initialize();
+}
+
+public void initialize(){
+	
+	jButton2.setVisible(false);
+	jButton3.setVisible(false);
+	jTextField1.setVisible(false);
+}
+	
+private void initComponents() {
+		
+	jButton1 = new javax.swing.JButton();
+	setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+	jButton1.setText("Start Session");
+	jButton1.addActionListener(new java.awt.event.ActionListener() {
+
+public void actionPerformed(java.awt.event.ActionEvent evt) {
+       jButton1ActionPerformed(evt);
+}
+	});
+
+	getContentPane().setLayout(new GridLayout(0, 1, 0, 0));
+	getContentPane().add(jButton1);
+	jLabel1 = new javax.swing.JLabel();
+
+	getContentPane().add(jLabel1);
+	label = new JLabel("");
+	getContentPane().add(label);
+
+	jTextField1 = new javax.swing.JTextField();
+	getContentPane().add(jTextField1);
+	label_1 = new JLabel("");
+
+	getContentPane().add(label_1);
+	jButton3 = new javax.swing.JButton();
+	jButton3.setText("Finish Session");
+	jButton3.addActionListener(new java.awt.event.ActionListener() {
+
+public void actionPerformed(java.awt.event.ActionEvent evt) {
+     jButton3ActionPerformed(evt);
+}
+
+});
+
+	getContentPane().add(jButton3);
+	jButton2 = new javax.swing.JButton();
+	jButton2.setText("Next Question");
+	jButton2.addActionListener(new java.awt.event.ActionListener() {
+
+public void actionPerformed(java.awt.event.ActionEvent evt) {
+     jButton2ActionPerformed(evt);
+}
+
+});
+
+	getContentPane().add(jButton2);
+	label_2 = new JLabel("");
+	getContentPane().add(label_2);
+	label_3 = new JLabel("");
+	getContentPane().add(label_3);
+	pack();
+
+}//
+
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+
+	this.setSize(200, 200);
+	jTextField1.setVisible(true);
+	jButton2.setVisible(true);
+	String Question = getNextQuestion();
+	jLabel1.setText("Session #" + countSession + " Q" + countQuest + ": " + Question);
+	countQuest++;
+
+	BufferedWriter bw = null;
+	FileWriter fw = null;
+
+	try{
+
+	File file = new File(filename);
+	    if(!file.exists()){
+	        file.createNewFile();
+}
+	fw = new FileWriter(file.getAbsoluteFile(),true);
+	bw = new BufferedWriter(fw);
+	bw.write(Question + "\n");
+}
+
+	catch(IOException e){
+	e.printStackTrace();
+}
+
+	finally {
+
+	   try {
+	       if (bw != null)
+	       bw.close();
+	       if (fw != null)
+	       fw.close();
+}
+	catch (IOException ex) {
+	ex.printStackTrace();
+}
+ }
+  }
+
+private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {
+
+	BufferedWriter bw = null;
+	FileWriter fw = null;
+
+	String answer = jTextField1.getText();
+
+	if(answer.length() > greatest.length())
+	greatest = answer;
+
+	if(answer.length() < smallest.length())
+	smallest = answer;
+
+	try{
+
+	  File file = new File(filename);
+
+	    if(!file.exists()){
+
+	      file.createNewFile();
+}
+
+	fw = new FileWriter(file.getAbsoluteFile(),true);
+	bw = new BufferedWriter(fw);
+	bw.write(answer + "\n\n");
+}
+
+	catch(IOException e){
+	e.printStackTrace();
+}
+
+	finally {
+
+	    try {
+
+	      if (bw != null)
+	      bw.close();
+ 
+	      if (fw != null)
+	      fw.close();
+} 
+	catch (IOException ex) {
+	ex.printStackTrace();
+}
+ }
+
+	jTextField1.setText("");
+	String Question = getNextQuestion();
+	jLabel1.setText("Session #" + countSession + " Q" + countQuest + ": " + Question);
+	countQuest++;
+
+	if(countQuest > 10){
+
+	countQuest = 1;
+	countSession++;
+}
+
+	try{
+
+	   File file = new File(filename);
+	     if(!file.exists()){
+	     file.createNewFile();
+}
+
+	fw = new FileWriter(file.getAbsoluteFile(),true);
+	bw = new BufferedWriter(fw);
+	bw.write(Question + "\n" + answer + "\n");
+
+}
+
+	catch(IOException e){
+	e.printStackTrace();
+}
+
+	finally {
+
+	     try {
+	        if (bw != null)
+	        bw.close();
+	        if (fw != null)
+	        fw.close();
+} 
+	     
+	     catch (IOException ex) {
+	     ex.printStackTrace();
+}
+ }
+	
+	i=i+1;
+	answers[i] = answer;
+	
+	   if(i==9){
+	    jButton3.setVisible(true);
+	    jButton2.setVisible(false);
+  }
+}
+
+private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {
+
+	jTextField1.setVisible(false);
+	jButton1.setVisible(false);
+	jButton2.setVisible(false);
+
+	jLabel1.setText("WOW " + greatest + " and " + smallest + " seem important to you");
+	countSession++;
+
+}
+
+public String QuestionBank(int my_random){
+
+	String[] questions = new String[10]; //increase array size if you will add more questions
+
+	questions[0]= "Which three words describe you best?";
+	questions[1]= "Which is your best feature?";
+	questions[2]= "Which common saying or phrase describes you?";
+	questions[3]= "What’s the best thing that’s happened to you this week?";
+	questions[4]= "Who was your role model when you were a child?";
+	questions[5]= "Who was your favorite teacher and why?";
+	questions[6]= "What was your favorite subject at school?";
+	questions[7]= "What did you want to be when you grew up?";
+	questions[8]= "If you could have one wish come true what would it be?";
+	questions[9]= "Which would you prefer — three wishes over five years or one wish right now?";
+
+	//add more questions
+
+	return questions[my_random];
+}
+
+public String getNextQuestion(){
+	Random r = new Random();
+	int my_random = r.nextInt((9-0)+1)+0;
+	String question = QuestionBank(my_random);
+	return question;
+}
+	
+public static void main(String args[]) {
+
+	try {
+
+	   for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+
+	     if ("Nimbus".equals(info.getName())) {
+
+	      javax.swing.UIManager.setLookAndFeel(info.getClassName());
+
+	break;
+  }
+ }
+} 
+	
+	catch (ClassNotFoundException ex) {
+	java.util.logging.Logger.getLogger(ProEliza.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+} 
+	catch (InstantiationException ex) {
+	java.util.logging.Logger.getLogger(ProEliza.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+} 
+	catch (IllegalAccessException ex) {
+	java.util.logging.Logger.getLogger(ProEliza.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+} 
+	catch (javax.swing.UnsupportedLookAndFeelException ex) {
+	java.util.logging.Logger.getLogger(ProEliza.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+}
+
+	java.awt.EventQueue.invokeLater(new Runnable() {
+
+public void run() {
+
+	new ProEliza().setVisible(true);
+   }
+  });
+ }
+}
